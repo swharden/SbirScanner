@@ -31,12 +31,13 @@ internal static class Html
     {
         StringBuilder sb = new();
 
+        int count = 1;
         foreach (Award award in awards)
         {
             string highlightedAbstract = award.Abstract.Replace("medical", "<mark>medical</mark>", StringComparison.InvariantCultureIgnoreCase);
 
             string html = $"""
-                <h1 class='mt-5'>{award.Company}</h1> 
+                <h1 class='mt-5'>{count++}. {award.Company}</h1> 
                 <div><a href='{award.CompanyURL}'>{award.CompanyURL}</a></div>
                 <div><strong>{award.Title}</strong></div>
                 <div>{award.Employees} people Awarded ${award.Thousand}k on {award.Date} <a href='{award.AwardURL}'>{award.TrackingNumber}</a></div>
