@@ -5,6 +5,8 @@ internal static class Program
     public static void Main()
     {
         string dbFilePath = Locate.DatabaseFile();
-        Console.WriteLine(dbFilePath);
+        CsvDatabase db = new(dbFilePath);
+        db.FilterKeyword("analytics");
+        db.SaveReport();
     }
 }

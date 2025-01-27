@@ -27,20 +27,26 @@ internal static class Html
             """.Replace("{{BODY}}", html);
     }
 
-    public static void SaveReport(IEnumerable<Award> awards, string saveAs = "report.html")
+    public static void SaveReport(IEnumerable<Award> awards, string saveAs, IEnumerable<string> keywords)
     {
         StringBuilder sb = new();
 
         int count = 1;
         foreach (Award award in awards)
         {
-            string highlightedAbstract = award.Abstract.Replace("medical", "<mark>medical</mark>", StringComparison.InvariantCultureIgnoreCase);
+            string highlightedAbstract = award.Abstract;
 
+            foreach (string keyword in keywords)
+            {
+                highlightedAbstract = highlightedAbstract.Replace(keyword, $"<mark>{keyword}</mark>", StringComparison.InvariantCultureIgnoreCase);
+            }
+
+            string usd = award.USD is null ? "unknown USD" : $"${(int)(award.USD / 1e3)}k";
             string html = $"""
                 <h1 class='mt-5'>{count++}. {award.Company}</h1> 
                 <div><a href='{award.CompanyURL}'>{award.CompanyURL}</a></div>
                 <div><strong>{award.Title}</strong></div>
-                <div>{award.Employees} people Awarded ${award.Thousand}k on {award.Date} <a href='{award.AwardURL}'>{award.TrackingNumber}</a></div>
+                <div>{award.Employees} people Awarded {usd} on {award.Date} <a href='{award.AwardURL}'>{award.TrackingNumber}</a></div>
                 <div class='bg-light border rounded text-muted p-3'>{highlightedAbstract}</div>
                 <hr class='my-4 invisible' />
                 """;
